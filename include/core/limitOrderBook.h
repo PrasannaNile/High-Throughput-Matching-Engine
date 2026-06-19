@@ -16,6 +16,9 @@ namespace MatchingEngine {
         std::map<uint64_t, PriceLevel, std::less<int>> asks; 
         // Fast address book: get exact mode of order in list
         std::unordered_map<uint64_t, std::list<Order>::iterator> orderRegistry;
+
+        void addOrder(const Order& order);
+
     public:
     };
 }
