@@ -19,6 +19,8 @@ namespace MatchingEngine {
 
         void addOrder(const Order& order);
 
+        bool cancelOrder(uint64_t orderId);
+
     public:
     };
 }

@@ -18,7 +18,9 @@ namespace MatchingEngine {
         explicit PriceLevel(uint64_t levelPrice);
 
         // Adds an order to the back of the queue (O(1))
-        void addOrder(const Order& order);
+        void pushOrder(const Order& order);
+
+        std::list<Order>::iterator eraseOrder(std::list<Order>::iterator it);
 
         // Consumes volume from the front order during a match (O(1))
         void executeMatch(uint32_t matchQuantity);
