@@ -47,6 +47,13 @@ namespace MatchingEngine {
         return true;
     }
 
+    void LimitOrderBook::processOrder(Order& incomingOrder) {
+
+        matchOrder(incomingOrder);
+
+        if(incomingOrder.orderQuantity > 0) addOrder(incomingOrder);
+    }
+
     void LimitOrderBook::matchOrder(Order& incomingOrder) {
         // type of order and look in to opposite orders map
         if(incomingOrder.orderSide == OrderSideEnum::BUY) {
@@ -65,15 +72,44 @@ namespace MatchingEngine {
                     if(restingOrder.orderQuantity == 0) { // resting order also gets exhaust
                         orderRegistry.erase(restingOrder.orderId);
                         shelf.eraseOrder(shelf.orderQueue.begin());
+                        if(shelf.orderQueue.empty()) asks.erase(asks.begin());
                     }
+                    break;
+                } else {
+                    incomingOrder.orderQuantity -= restingOrder.orderQuantity;
+                    orderRegistry.erase(restingOrder.orderId);
+                    shelf.orderQueue.erase(shelf.orderQueue.begin());
+                    if(shelf.orderQueue.empty()) asks.erase(asks.begin());
                 }
             }
 
         } else {
 
             while(bids.begin() != bids.end() && incomingOrder.orderPrice <= bids.begin()->first) {
-
+                PriceLevel& shelf = asks.begin()->second;
+                Order& restingOrder = shelf.orderQueue.front();
                 
+                uint64_t matchQty = std::min(incomingOrder.orderQuantity, restingOrder.orderQuantity);
+
+                if(incomingOrder.orderQuantity <= restingOrder.orderQuantity) {
+                    restingOrder.orderQuantity -= matchQty;
+                    shelf.totalVolume -= matchQty;
+                    incomingOrder.orderQuantity = 0;
+
+                    if(restingOrder.orderQuantity == 0) {
+                        orderRegistry.erase(restingOrder.orderId);
+                        shelf.orderQueue.erase(shelf.orderQueue.begin());
+                        if(shelf.orderQueue.empty()) bids.erase(bids.begin());
+
+                    }
+                    break;
+                } else {
+                    incomingOrder.orderQuantity -= restingOrder.orderQuantity;
+                    orderRegistry.erase(restingOrder.orderId);
+                    shelf.orderQueue.erase(shelf.orderQueue.begin());
+
+                    if(shelf.orderQueue.empty()) bids.erase(bids.begin());
+                }
 
             }
 

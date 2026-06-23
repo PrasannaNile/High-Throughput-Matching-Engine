@@ -21,8 +21,11 @@ namespace MatchingEngine {
 
         bool cancelOrder(uint64_t orderId); // order is cancel or match, then remove it
 
-        void matchOrder(Order& incomingOrder);
+        void processOrder(Order& incomingOrder);
+
+        void matchOrder(Order& incomingOrder); // looking for a trade for incoming order
 
     public:
     };
 }
+
