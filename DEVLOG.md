@@ -36,3 +36,13 @@
 
 * **O(1) Cancellation Routing:** Implemented an `orderRegistry` using an `std::unordered_map` that pairs a unique `orderId` directly to a `std::list<Order>::iterator`. This bypasses linear search requirements, enabling instant, direct node un-linking during order cancellation or deletion requests.
 * **Next Target (Day 3):** Commencing implementation of the public interface methods for order insertion and cancellation algorithms.
+
+
+## Core Execution Engine & Simulation (Day 2 & Day 3)
+* **FIFO Matching Logic:** Engineered the `matchOrder` loop to handle active crossing logic. Implemented continuous boundary checks that automatically deplete resting volume, un-link exhausted nodes from the `std::list` queue, and erase completely emptied price shelves from the map.
+
+* **Order Orchestration Pipeline:** Built the public entry point `processOrder` to unify matching and insertion. The engine first attempts an aggressive sweep via `matchOrder`, then cleanly routes any residual or unmatched liquidity to `addOrder` to park on the appropriate book side.
+
+* **State Verification & Validation:** Staged an active simulation environment inside `main.cpp` using aggregate struct initialization. Verified complex trading execution cases, proving that fully filled aggressive orders leave zero footprint, while partial fills preserve exact volume tracking.
+
+* **Multi-Level Depth Visualizer:** Upgraded shallow map diagnostics into full horizontal market layout logs (`displayBuyers`/`displaySellers`). Implemented a nested loop traversal through each shelf's `std::list<Order>` to print active order IDs and quantities for structural auditing.
