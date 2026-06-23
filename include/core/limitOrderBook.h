@@ -17,6 +17,7 @@ namespace MatchingEngine {
         // Fast address book: get exact mode of order in list
         std::unordered_map<uint64_t, std::list<Order>::iterator> orderRegistry;
 
+    public:
         void addOrder(const Order& order); // add the new incoming order in bids or in asks
 
         bool cancelOrder(uint64_t orderId); // order is cancel or match, then remove it
@@ -25,7 +26,9 @@ namespace MatchingEngine {
 
         void matchOrder(Order& incomingOrder); // looking for a trade for incoming order
 
-    public:
+        void displayBuyers();
+
+        void displaySellers();
     };
 }
 

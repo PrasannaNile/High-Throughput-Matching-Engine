@@ -14,4 +14,6 @@ add_compile_definitions(CONCPP_BUILD_SHARED) # defines a global preprocessor mac
 
 add_executable(HighThroughputMatchingEngine # single .exe file 
     src/main.cpp
+    src/core/limitOrderBook.cpp
+    src/core/priceLevel.cpp
 )

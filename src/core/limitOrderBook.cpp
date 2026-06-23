@@ -1,5 +1,8 @@
 #include "core/limitOrderBook.h"
 
+
+#include <iostream>
+
 namespace MatchingEngine {
     void LimitOrderBook::addOrder(const Order& order) {
         if (order.orderSide == OrderSideEnum::BUY) {
@@ -115,5 +118,36 @@ namespace MatchingEngine {
 
         }
     }
+
+    void LimitOrderBook::displayBuyers() {
+        if(bids.empty()) std::cerr << "[Book Error] xxxxxxxx No Buyers Order yet xxxxxxxxx";
+
+        else {
+            std::cout << "*************** Buyers (bids) ***************** " << "\n";
+            for(const auto& [price, shelf]: bids) {
+                std::cout << "Price: " << price << " | TotalVol: " << shelf.totalVolume << " => ";
+                for(const auto& restingOrder: shelf.orderQueue) {
+                    std::cout << "[ OrderId: " << restingOrder.orderId << ", Quantity: " << restingOrder.orderQuantity << " ]"; 
+                }
+            }
+        }
+        std::cout << "\n\n";
+    }
+
+    void LimitOrderBook::displaySellers() {
+        if(asks.empty()) std::cerr << "[Book Error] xxxxxxxx No Sellers Order yet xxxxxxxxx";
+
+        else {
+            std::cout << "*************** Sellers (asks) ***************** " << "\n";
+            for(const auto& [price, shelf]: asks) {
+                std::cout << "Price: " << price << " | TotalVol: " << shelf.totalVolume << " => ";
+                for(const auto& restingOrder: shelf.orderQueue) {
+                    std::cout << "[ OrderId: " << restingOrder.orderId << ", Quantity: " << restingOrder.orderQuantity << " ] "; 
+                }
+            }
+        }
+        std::cout << "\n\n";
+    }
+
 
 }
