@@ -89,7 +89,7 @@ namespace MatchingEngine {
         } else {
 
             while(bids.begin() != bids.end() && incomingOrder.orderPrice <= bids.begin()->first) {
-                PriceLevel& shelf = asks.begin()->second;
+                PriceLevel& shelf = bids.begin()->second;
                 Order& restingOrder = shelf.orderQueue.front();
                 
                 uint64_t matchQty = std::min(incomingOrder.orderQuantity, restingOrder.orderQuantity);
@@ -129,6 +129,7 @@ namespace MatchingEngine {
                 for(const auto& restingOrder: shelf.orderQueue) {
                     std::cout << "[ OrderId: " << restingOrder.orderId << ", Quantity: " << restingOrder.orderQuantity << " ]"; 
                 }
+                std::cout << "\n";
             }
         }
         std::cout << "\n\n";
@@ -144,10 +145,10 @@ namespace MatchingEngine {
                 for(const auto& restingOrder: shelf.orderQueue) {
                     std::cout << "[ OrderId: " << restingOrder.orderId << ", Quantity: " << restingOrder.orderQuantity << " ] "; 
                 }
+                std::cout << "\n";
             }
         }
         std::cout << "\n\n";
     }
-
 
 }
