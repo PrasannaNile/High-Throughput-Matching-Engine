@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <sstream>
+#include <string>
 
 
 namespace MatchingEngine {
@@ -14,6 +15,8 @@ namespace MatchingEngine {
         void run(); // REPL entry point (continuous looking for order)
         // break done order request into meaningful tokens
         std::vector<std::string> tokenization(std::string& orderStr); 
-        
+        // handle input exception
+        bool handleInputException(std::vector<std::string>& orderToken, OrderSideEnum& orderSide, int& orderQuantity, int& orderPrice);
+
     };
 }

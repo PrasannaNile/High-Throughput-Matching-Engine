@@ -7,6 +7,7 @@
 
 
 
+
 void MatchingEngine::Router::run() {
     while(true) {
         std::string orderStr{};
@@ -21,34 +22,10 @@ void MatchingEngine::Router::run() {
         }
 
         [[maybe_unused]] OrderSideEnum orderSide{OrderSideEnum::BUY};
-
-        try {
-            if(orderToken[0] == "SELL") orderSide = MatchingEngine::OrderSideEnum::SELL;
-            else if(orderToken[0] == "BUY") orderSide = MatchingEngine::OrderSideEnum::BUY;
-            else throw std::runtime_error("[Input Error] xxxxxxxxxxxxxx Invalid Order Side xxxxxxxxxxxxxxx\n");
-
-        } catch(std::exception& err) {
-            std::cerr << err.what();
-            continue;
-        }
-        
-        // 1. Safe Quantity Parsing
         int orderQuantity{0};
-        auto quantResult = std::from_chars(orderToken[1].data(), orderToken[1].data() + orderToken[1].size(), orderQuantity);
-
-        if (quantResult.ec != std::errc() || orderQuantity <= 0) {
-            std::cerr << "[Input Error] xxxxxxxxxxxx Invalid Quantity (Must be a positive number) xxxxxxxxxxxx\n";
-            continue;
-        }
-
-        // 3. Safe Price Parsing (Non-throwing)
         int orderPrice{0};
-        auto priceResult = std::from_chars(orderToken[2].data(), orderToken[2].data() + orderToken[2].size(), orderPrice);
 
-        if (priceResult.ec != std::errc() || orderPrice <= 0) {
-            std::cerr << "[Input Error] xxxxxxxxxxxx Invalid Price (Must be a positive number) xxxxxxxxxxxx\n";
-            continue;
-        }
+        if(!handleInputException(orderToken, orderSide, orderQuantity, orderPrice)) continue;
 
         // --- All Inputs Verified Successfully ---
         std::cout << "[Success] Parsed Valid Order: " 
@@ -69,4 +46,36 @@ std::vector<std::string> MatchingEngine::Router::tokenization(std::string& order
     }
 
     return orderToken;
+}
+
+
+bool MatchingEngine::Router::handleInputException(std::vector<std::string>& orderToken, OrderSideEnum& orderSide, int& orderQuantity, int& orderPrice) {
+
+    try {
+        if(orderToken[0] == "SELL") orderSide = MatchingEngine::OrderSideEnum::SELL;
+        else if(orderToken[0] == "BUY") orderSide = MatchingEngine::OrderSideEnum::BUY;
+        else throw std::runtime_error("[Input Error] xxxxxxxxxxxxxx Invalid Order Side xxxxxxxxxxxxxxx\n");
+
+    } catch(std::exception& err) {
+        std::cerr << err.what();
+        return false;
+    }
+    
+    // 1. Safe Quantity Parsing
+    auto quantResult = std::from_chars(orderToken[1].data(), orderToken[1].data() + orderToken[1].size(), orderQuantity);
+
+    if (quantResult.ec != std::errc() || orderQuantity <= 0) {
+        std::cerr << "[Input Error] xxxxxxxxxxxx Invalid Quantity (Must be a positive number) xxxxxxxxxxxx\n";
+        return false;
+    }
+
+    // 3. Safe Price Parsing (Non-throwing)
+    auto priceResult = std::from_chars(orderToken[2].data(), orderToken[2].data() + orderToken[2].size(), orderPrice);
+
+    if (priceResult.ec != std::errc() || orderPrice <= 0) {
+        std::cerr << "[Input Error] xxxxxxxxxxxx Invalid Price (Must be a positive number) xxxxxxxxxxxx\n";
+        return false;
+    }
+
+    return true;
 }
