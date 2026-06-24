@@ -12,7 +12,8 @@ namespace MatchingEngine {
         MatchingEngine::LimitOrderBook book;
     public:
         void run(); // REPL entry point (continuous looking for order)
-        std::vector<std::string> tokenization(std::string& orderStr);
+        // break done order request into meaningful tokens
+        std::vector<std::string> tokenization(std::string& orderStr); 
         
     };
 }
