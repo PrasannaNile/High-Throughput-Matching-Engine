@@ -17,4 +17,5 @@ add_executable(HighThroughputMatchingEngine # single .exe file
     src/core/limitOrderBook.cpp
     src/core/priceLevel.cpp
     src/core/router.cpp
+    src/core/orderGenerator.cpp
 )

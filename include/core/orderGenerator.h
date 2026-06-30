@@ -11,19 +11,19 @@ namespace MatchingEngine {
     class OrderGenerator {
     private:
         std::vector<MatchingEngine::Order> orderPool;
-        int minPrice;
-        int maxPrice;
-        int minQty;
-        int maxQty;
+        uint64_t minPrice;
+        uint64_t maxPrice;
+        uint32_t minQty;
+        uint32_t maxQty;
         std::mt19937 randEngine;
         std::uniform_int_distribution<uint32_t> distQty;
         std::uniform_int_distribution<uint64_t> distPrice;
 
 
     public:
-        OrderGenerator() {};
+        OrderGenerator();
 
         void generateOrder(const uint32_t orderCount);
-        const std::vector<MatchingEngine::Order>& getOrderPool() const;
+        std::vector<MatchingEngine::Order>& getOrderPool();
     };
 }

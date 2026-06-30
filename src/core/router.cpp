@@ -6,12 +6,19 @@
 #include <string>
 #include <charconv>
 
+extern void runPerformanceBenchmark();
 namespace MatchingEngine {
     void Router::run() {
         while(true) {
             std::string orderStr{};
             std::cout << "Place Order: ";
             std::getline(std::cin, orderStr);
+
+            // --- Intercept Benchmark Request ---
+            if (orderStr == "BENCHMARK" || orderStr == "benchmark") {
+                runPerformanceBenchmark();
+                continue; // Go back to the top of the loop for the next order
+            }
 
             std::vector<std::string> orderToken = tokenization(orderStr);
 
