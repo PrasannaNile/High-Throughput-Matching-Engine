@@ -9,5 +9,17 @@ namespace MatchingEngine {
     }
     
     void OrderGenerator::generateOrder(const uint32_t orderCount) {
+        this->orderPool.clear();
+        this->orderPool.reserve(orderCount);
+
+        for(int i = 1; i <= orderCount; i++) {
+
+            orderPool.emplace_back(i, i, (i%2 == 0) ? OrderSideEnum::BUY : OrderSideEnum::SELL, 
+                                 OrderStateEnum::NEW, this->distQty(this->randEngine), this->distPrice(this->randEngine));
+        }
+    }
+
+    const std::vector<MatchingEngine::Order>& OrderGenerator::getOrderPool() const {
+        return this->orderPool;
     }
 }

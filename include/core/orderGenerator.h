@@ -24,5 +24,6 @@ namespace MatchingEngine {
         OrderGenerator() {};
 
         void generateOrder(const uint32_t orderCount);
+        const std::vector<MatchingEngine::Order>& getOrderPool() const;
     };
 }
